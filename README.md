@@ -5,16 +5,20 @@ Authors: Gillian Young (University of Manchester)
 
 Contact gillian.young@manchester.ac.uk with any queries.
 
+-----------------------------------------------------------------------------
 
 MATLAB software used to classify elemental composition from scanning electron
 microscopes into atmospherically-relevant aerosol particle species.
 
+-----------------------------------------------------------------------------
 
 1. Installation instructions
 2. Instructions for use
 3. Version control
 4. Planned updates
 5. Licensing information
+
+-----------------------------------------------------------------------------
 
 1. Installation instructions
 
@@ -31,18 +35,18 @@ Run sem_load from the MATLAB command line and follow the instructions in the
 MATLAB workspace. Make sure the data to be analysed is in the current working 
 directory.
 
-   3. Version control
+3. Version control
 
 Version control is in place with MEMPAS. Updates and identified bugs must be 
 submitted to the branch on GitHub. Authors of successful updates will be added
 to the author list.
 
-   4. Planned updates
+4. Planned updates
 
 - Switches will be updated to a GUI in a subsequent version. 
 - Possible addition of cluster analysis.
 
-   5. Licensing information
+5. Licensing information
 
 This software is free to use for any interested parties, with the requirement 
 that it, and the authors, are acknowledged in any resulting publications and 
