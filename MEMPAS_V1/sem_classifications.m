@@ -47,6 +47,7 @@ if length(find(strcmp('Pb', txt)==1))==1, Pb=input(:,find(strcmp('Pb', txt)==1))
   
 elms=txt(7:final_entry);
 OUTPUT.RAW.Elements=elms;
+OUTPUT.RAW.Headers=txt;
 unclassed=input; 
 
 total=zeros(n,1);
