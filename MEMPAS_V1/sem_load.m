@@ -187,18 +187,38 @@ if new==0,
     
 elseif new==1
     
-    [~,leng] = xlsread(filename,'Mass % (norm.)', 'A:A'); %number of rows in array
-    [~,col] = xlsread(filename,'Mass % (norm.)', '7:7'); %number of columns in array
-    Alphabet1=('A':'Z').';
-    for i=1:26, Alphabet2{i}=strcat('A',Alphabet1(i)); end;
-    if length(col)>26 && length(col)<52,
-        col_num=Alphabet2(length(col)-26);
-    else col_num=Alphabet1(length(col));
-    end
-    end_col=[col_num,num2str(length(leng))];
-    [num,txt,raw]=xlsread(filename,'Mass % (norm.)',['B7:',end_col]);
+% % %     [~,leng] = xlsread(filename,'Mass % (norm.)', 'A:A'); %number of rows in array
+% % %     [~,col] = xlsread(filename,'Mass % (norm.)', '7:7'); %number of columns in array
+    [~,leng] = xlsread(filename,5, 'A:A'); %number of rows in array
+    [~,col] = xlsread(filename,5, '7:7'); %number of columns in array    
+%     Alphabet1=('A':'Z').';
+% % %     for i=1:26, Alphabet2{i}=strcat('A',Alphabet1(i)); end;
+%     a=repmat(char('A'),length(Alphabet1),1);
+%     Alphabet2=strcat(a,Alphabet1);    
+%     if length(col)>26 && length(col)<52,
+%         col_num=Alphabet2(length(col)-26,:);
+%     else col_num=Alphabet1(length(col));
+%     end
+%     end_col=[col_num,num2str(length(leng))];
     
+% %     [num,txt,raw]=xlsread(filename,'Mass % (norm.)',['B7:',end_col]);
+% %     [num,txt,raw]=xlsread(filename,5,['B7:',end_col]);
+
+%     lastrow=num2str(length(leng));
+%     [field_no]=xlsread(filename,5,['B7:B',lastrow]);
+%     [area]=xlsread(filename,5,['F7:F',lastrow]);
+%     [avg_diam]=xlsread(filename,5,['G7:G',lastrow]);
+%     [volume]=xlsread(filename,5,['L7:L',lastrow]);
     
+
+    filename_csv=[filename(1:end-5),'.csv'];
+    element_list=col(16:end);
+    [num]=csvread(filename_csv,7,15);       % read in elements
+    txt=[element_list 'Field No' 'Area' 'Average Diameter' 'Volume'];
+%     end_row=perl('countlines.pl',filename);
+%     [num]=csvread(filename,8,15);
+
+   
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -210,17 +230,31 @@ elseif new==1
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     
     
+    
+% %     last_col=5+(length(col)-16);
+% %     data=zeros(length(num(:,1)),last_col);
+% %     headers=[txt(1,1) txt(1,5) txt(1,6) txt(1,11) txt(1,15:length(col)-1)];
+% %     data(:,1)=num(:,1);
+% %     data(:,2:3)=num(:,5:6);
+% %     data(:,4)=num(:,11);
+% %     data(:,5:last_col)=num(:,15:length(col)-1);
+% %     data(isnan(data))=0;
+    
+
     last_col=5+(length(col)-16);
     data=zeros(length(num(:,1)),last_col);
-    headers=[txt(1,1) txt(1,5) txt(1,6) txt(1,11) txt(1,15:length(col)-1)];
-    data(:,1)=num(:,1);
-    data(:,2:3)=num(:,5:6);
-    data(:,4)=num(:,11);
-    data(:,5:last_col)=num(:,15:length(col)-1);
+    headers=[txt(end-3) txt(end-2) txt(end-1) txt(end) txt(1:end-4)];
+    data(:,1)=num(:,end-3);
+    data(:,2)=num(:,end-2);
+    data(:,3)=num(:,end-1);
+    data(:,4)=num(:,end);
+    data(:,5:last_col)=num(:,1:last_col-4);
     data(isnan(data))=0;
-    
+
+
     element_string1={'Elements identified: '};
-    element_string2=headers(5:last_col);
+% %     element_string2=headers(5:last_col);
+    element_string2=element_list;
     
     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
     
