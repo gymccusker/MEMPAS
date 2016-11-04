@@ -12,6 +12,7 @@ partsize=input(:,3);
 n=length(input(:,1));
 input(isnan(input))=0;
 
+
 if length(find(strcmp('B', txt)==1))==1,  B=input(:,find(strcmp('B', txt)==1));   B(isnan(B))=0;   OUTPUT.RAW.B=B;   else B=zeros(n,1);  end
 if length(find(strcmp('C', txt)==1))==1,  C=input(:,find(strcmp('C', txt)==1));   C(isnan(C))=0;   OUTPUT.RAW.C=C;   end
 if length(find(strcmp('N', txt)==1))==1,  N=input(:,find(strcmp('N', txt)==1));   N(isnan(N))=0;   OUTPUT.RAW.N=N;   else N=zeros(n,1);  end
@@ -45,17 +46,27 @@ if length(find(strcmp('Ba', txt)==1))==1, Ba=input(:,find(strcmp('Ba', txt)==1))
 if length(find(strcmp('W', txt)==1))==1,  W=input(:,find(strcmp('W', txt)==1));   W(isnan(W))=0;   OUTPUT.RAW.W=W;   else W=zeros(n,1);  end
 if length(find(strcmp('Pb', txt)==1))==1, Pb=input(:,find(strcmp('Pb', txt)==1)); Pb(isnan(Pb))=0; OUTPUT.RAW.Pb=Pb; else Pb=zeros(n,1); end
   
-elms=txt(7:final_entry);
-OUTPUT.RAW.Elements=elms;
-OUTPUT.RAW.Headers=txt;
-unclassed=input; 
 
 total=zeros(n,1);
-for i=1:n,
-   total(i)=sum(input(i,9:final_entry)); 
-   all(i)=sum(input(i,7:final_entry)); 
-end
-
+% if flag==0
+%     for i=1:n,
+%         total(i)=sum(input(i,9:final_entry));
+%         all(i)=sum(input(i,7:final_entry));
+%         elms=txt(7:final_entry);
+%         OUTPUT.RAW.Elements=elms;
+%         OUTPUT.RAW.Headers=txt;
+%     end
+% elseif flag==1
+    % %  for new esem, needs to be:
+    for i=1:n,
+        total(i)=sum(input(i,7:final_entry));
+        all(i)=sum(input(i,5:final_entry));
+        elms=txt(5:final_entry);
+        OUTPUT.RAW.Elements=elms;
+        OUTPUT.RAW.Headers=txt;
+    end
+% end
+unclassed=input;
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % % % % %     BEGIN CLASSIFICATION SCHEME
@@ -3469,6 +3480,8 @@ for i=1:length(OUTPUT.All.Raw(:,1)),
 end
 OUTPUT.All.Mean=nanmean(OUTPUT.All.Normalised,1);
 OUTPUT.All.Number=length(OUTPUT.All.Raw(:,1));
+
+
 OUTPUT.Silicate.All_Indices=mineral_dust_index;
 OUTPUT.Silicate.Raw=mineral_dust;
 for i=1:length(OUTPUT.Silicate.All_Indices),
@@ -3476,6 +3489,8 @@ for i=1:length(OUTPUT.Silicate.All_Indices),
 end
 if length(OUTPUT.Silicate.All_Indices)>0, OUTPUT.Silicate.Mean=nanmean(OUTPUT.Silicate.Normalised,1); end
 OUTPUT.Silicate.Number=length(OUTPUT.Silicate.Raw(:,1));
+
+
 OUTPUT.MixedSil.All_Indices=mix_index;
 OUTPUT.MixedSil.Raw=mix;
 for i=1:length(OUTPUT.MixedSil.All_Indices)
@@ -3483,6 +3498,8 @@ for i=1:length(OUTPUT.MixedSil.All_Indices)
 end
 if length(OUTPUT.MixedSil.All_Indices)>0, OUTPUT.MixedSil.Mean=nanmean(OUTPUT.MixedSil.Normalised,1); end
 OUTPUT.MixedSil.Number=length(OUTPUT.MixedSil.Raw(:,1));
+
+
 OUTPUT.CaRich.All_Indices=Ca_rich_index;
 OUTPUT.CaRich.Raw=Ca_rich;
 for i=1:length(OUTPUT.CaRich.All_Indices)
@@ -3490,6 +3507,8 @@ for i=1:length(OUTPUT.CaRich.All_Indices)
 end
 if length(OUTPUT.CaRich.All_Indices)>0, OUTPUT.CaRich.Mean=nanmean(OUTPUT.CaRich.Normalised,1); end
 OUTPUT.CaRich.Number=length(OUTPUT.CaRich.Raw(:,1));
+
+
 OUTPUT.FreshCl.All_Indices=seasalt_index;
 OUTPUT.FreshCl.Raw=freshss;
 for i=1:length(OUTPUT.FreshCl.All_Indices)
@@ -3497,6 +3516,8 @@ for i=1:length(OUTPUT.FreshCl.All_Indices)
 end
 if length(OUTPUT.FreshCl.All_Indices)>0, OUTPUT.FreshCl.Mean=nanmean(OUTPUT.FreshCl.Normalised,1);end
 OUTPUT.FreshCl.Number=length(OUTPUT.FreshCl.Raw(:,1));
+
+
 OUTPUT.AgedCl.All_Indices=agseasalt_index;
 OUTPUT.AgedCl.Raw=agedss;
 for i=1:length(OUTPUT.AgedCl.All_Indices)
@@ -3504,6 +3525,8 @@ for i=1:length(OUTPUT.AgedCl.All_Indices)
 end
 if length(OUTPUT.AgedCl.All_Indices)>0, OUTPUT.AgedCl.Mean=nanmean(OUTPUT.AgedCl.Normalised,1); end
 OUTPUT.AgedCl.Number=length(OUTPUT.AgedCl.Raw(:,1));
+
+
 OUTPUT.Sulph.All_Indices=sulphate_index;
 OUTPUT.Sulph.Raw=sulphate;
 for i=1:length(OUTPUT.Sulph.All_Indices)
@@ -3511,6 +3534,8 @@ for i=1:length(OUTPUT.Sulph.All_Indices)
 end
 if length(OUTPUT.Sulph.All_Indices)>0, OUTPUT.Sulph.Mean=nanmean(OUTPUT.Sulph.Normalised,1); end
 OUTPUT.Sulph.Number=length(OUTPUT.Sulph.Raw(:,1));
+
+
 OUTPUT.Gypsum.All_Indices=gypsum_index;
 OUTPUT.Gypsum.Raw=gypsum;
 for i=1:length(OUTPUT.Gypsum.All_Indices)
@@ -3518,6 +3543,8 @@ for i=1:length(OUTPUT.Gypsum.All_Indices)
 end
 if length(OUTPUT.Gypsum.All_Indices)>0, OUTPUT.Gypsum.Mean=nanmean(OUTPUT.Gypsum.Normalised,1); end
 OUTPUT.Gypsum.Number=length(OUTPUT.Gypsum.Raw(:,1));
+
+
 OUTPUT.Carbon.All_Indices=carbon_index;
 OUTPUT.Carbon.Raw=carbon;
 for i=1:length(OUTPUT.Carbon.All_Indices)
@@ -3525,6 +3552,8 @@ for i=1:length(OUTPUT.Carbon.All_Indices)
 end
 if length(OUTPUT.Carbon.All_Indices)>0, OUTPUT.Carbon.Mean=nanmean(OUTPUT.Carbon.Normalised,1); end
 OUTPUT.Carbon.Number=length(OUTPUT.Carbon.Raw(:,1));
+
+
 OUTPUT.Bio.All_Indices=bio_index;
 OUTPUT.Bio.Raw=bio;
 for i=1:length(OUTPUT.Bio.All_Indices)
@@ -3532,6 +3561,8 @@ for i=1:length(OUTPUT.Bio.All_Indices)
 end
 if length(OUTPUT.Bio.All_Indices)>0, OUTPUT.Bio.Mean=nanmean(OUTPUT.Bio.Normalised,1); end
 OUTPUT.Bio.Number=length(OUTPUT.Bio.Raw(:,1));
+
+
 OUTPUT.Metal.All_Indices=oxide_index;
 OUTPUT.Metal.Raw=oxide;
 for i=1:length(OUTPUT.Metal.All_Indices)
@@ -3539,6 +3570,8 @@ for i=1:length(OUTPUT.Metal.All_Indices)
 end
 if length(OUTPUT.Metal.All_Indices)>0, OUTPUT.Metal.Mean=nanmean(OUTPUT.Metal.Normalised,1); end
 OUTPUT.Metal.Number=length(OUTPUT.Metal.Raw(:,1));
+
+
 OUTPUT.Phos.All_Indices=phosphate_index;
 OUTPUT.Phos.Raw=phosphate;
 for i=1:length(OUTPUT.Phos.All_Indices)
@@ -3546,6 +3579,8 @@ for i=1:length(OUTPUT.Phos.All_Indices)
 end
 if length(OUTPUT.Phos.All_Indices)>0, OUTPUT.Phos.Mean=nanmean(OUTPUT.Phos.Normalised,1); end
 OUTPUT.Phos.Number=length(OUTPUT.Phos.Raw(:,1));
+
+
 OUTPUT.Biomass.All_Indices=Kdom_index;
 OUTPUT.Biomass.Raw=Kdom;
 if OUTPUT.Biomass.All_Indices>0
@@ -3556,6 +3591,8 @@ if OUTPUT.Biomass.All_Indices>0
 else OUTPUT.Biomass.Mean=zeros(length(text),1)';
 end
 OUTPUT.Biomass.Number=length(OUTPUT.Biomass.Raw(:,1));
+
+
 OUTPUT.Other.All_Indices=other_index;
 OUTPUT.Other.Raw=other;
 for i=1:length(OUTPUT.Other.All_Indices)

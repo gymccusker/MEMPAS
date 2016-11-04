@@ -12,6 +12,7 @@ partsize=input(:,3);
 n=length(input(:,1));
 input(isnan(input))=0;
 
+
 if length(find(strcmp('B', txt)==1))==1,  B=input(:,find(strcmp('B', txt)==1));   B(isnan(B))=0;   OUTPUT.RAW.B=B;   else B=zeros(n,1);  end
 if length(find(strcmp('C', txt)==1))==1,  C=input(:,find(strcmp('C', txt)==1));   C(isnan(C))=0;   OUTPUT.RAW.C=C;   end
 if length(find(strcmp('N', txt)==1))==1,  N=input(:,find(strcmp('N', txt)==1));   N(isnan(N))=0;   OUTPUT.RAW.N=N;   else N=zeros(n,1);  end
@@ -46,16 +47,26 @@ if length(find(strcmp('W', txt)==1))==1,  W=input(:,find(strcmp('W', txt)==1)); 
 if length(find(strcmp('Pb', txt)==1))==1, Pb=input(:,find(strcmp('Pb', txt)==1)); Pb(isnan(Pb))=0; OUTPUT.RAW.Pb=Pb; else Pb=zeros(n,1); end
 
 
-elms=txt(7:final_entry);
-OUTPUT.RAW.Elements=elms;
-unclassed=input;
-
 total=zeros(n,1);
-for i=1:n,
-    total(i)=sum(input(i,9:final_entry));
-    all(i)=sum(input(i,7:final_entry));
-end
-
+% if flag==0
+%     for i=1:n,
+%         total(i)=sum(input(i,9:final_entry));
+%         all(i)=sum(input(i,7:final_entry));
+%         elms=txt(7:final_entry);
+%         OUTPUT.RAW.Elements=elms;
+%         OUTPUT.RAW.Headers=txt;
+%     end
+% elseif flag==1
+    % %  for new esem, needs to be:
+    for i=1:n,
+        total(i)=sum(input(i,7:final_entry));
+        all(i)=sum(input(i,5:final_entry));
+        elms=txt(5:final_entry);
+        OUTPUT.RAW.Elements=elms;
+        OUTPUT.RAW.Headers=txt;
+    end
+% end
+unclassed=input;
 %
 %
 %       Other

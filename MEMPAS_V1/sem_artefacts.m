@@ -179,6 +179,8 @@ else
 end
 
 good_num(artef_index,:)=[];
+good_num(:,6)=[]; 
+good_num(:,5)=[]; 
 
 end
 

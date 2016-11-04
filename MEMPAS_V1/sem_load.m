@@ -6,14 +6,14 @@
 % % % % % % % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 dir=pwd;
 filename = uigetfile({'*.*','All Files (*.*)'},'Select SEM Output File (.csv for old ESEM, .xlsx for new ESEM)');
 
-% % % % 
+% % % %
 % % % %     CHOOSE INSTRUMENT
-% % % % 
+% % % %
 
 
 instrument_switch = input('Old SEM [XL30] (1), or new SEM (2):  ');
@@ -29,11 +29,11 @@ switch instrument_switch
 end
 
 
-% % % % 
+% % % %
 % % % %     LOAD IN DATA
-% % % % 
+% % % %
 
-    
+
 if new==0,
     
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -44,7 +44,7 @@ if new==0,
     % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     
     disp(['For Old SEM [XL30], element list must be specified'])
     disp(['Choose 1 of the following:'])
@@ -83,16 +83,15 @@ if new==0,
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     
-    last_col=7+((col-2)-21);
-    data=zeros(length(num(:,1)),last_col);
-    headers=[txt(2) txt(16) txt(14) 'Volume' txt(18) txt(19) txt(21:col-2)];
-    data(:,1)=num(:,2);                      % FIELD NUMBER
-    data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
-    data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
-    data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
-    data(:,5)=num(:,18);                     % SHAPE PARAMETER
-    data(:,6)=num(:,19);                     % ASPECT RATIO
-    data(:,7:last_col)=num(:,21:col-2);      % ELEMENT LIST
+%     last_col=7+((col-2)-21);
+%     data=zeros(length(num(:,1)),last_col);
+%     data(:,1)=num(:,2);                      % FIELD NUMBER
+%     data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
+%     data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
+%     data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
+    %     data(:,5)=num(:,18);                     % SHAPE PARAMETER
+    %     data(:,6)=num(:,19);                     % ASPECT RATIO
+    %     data(:,7:last_col)=num(:,21:col-2);      % ELEMENT LIST
     
     %     clear col leng
     
@@ -123,26 +122,51 @@ if new==0,
                 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
                 
                 case 1
-                    
+                    last_col=7+((col-2)-21);
+                    data=zeros(length(num(:,1)),last_col);
+                    data(:,1)=num(:,2);                      % FIELD NUMBER
+                    data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
+                    data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
+                    data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
+                    data(:,5)=num(:,18);                     % SHAPE PARAMETER
+                    data(:,6)=num(:,19);                     % ASPECT RATIO
+                    data(:,7:last_col)=num(:,21:col-2);      % ELEMENT LIST
+                    headers=[txt(2) txt(16) txt(14) 'Volume' txt(18) txt(19) txt(21:col-2)];
+                   
                     disp('YOUNG ET AL., (2016) SELECTED WITH ARTEFACT REMOVAL')
                     [dat,ARTEFACTS,total_num]=sem_artefacts(data,headers);
-                    [DATA]=sem_classifications(dat,headers,last_col);
+                    
+                    headers(:,6)=[];
+                    headers(:,5)=[];
+                    last_col2=last_col-2;
+                    
+                    [DATA]=sem_classifications(dat,headers,last_col2);
                     
                     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
                     disp(['Number of Viable Particles: ',num2str(length(dat(:,1)))])
                     
-                    flag=1;
+                    catflag=1;
                     artefact_string={'YOUNG ET AL., (2016) SELECTED WITH ARTEFACT REMOVAL'};
                     
                 case 2
                     
+                    last_col=7+((col-2)-21);
+                    data=zeros(length(num(:,1)),last_col-2);
+                    data(:,1)=num(:,2);                      % FIELD NUMBER
+                    data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
+                    data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
+                    data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
+                    data(:,5:last_col-2)=num(:,21:col-2);      % ELEMENT LIST
+                    headers=[txt(2) txt(16) txt(14) 'Volume' txt(21:col-2)];
+                    last_col2=last_col-2;
+                    
                     disp('YOUNG ET AL., (2016) SELECTED, NO ARTEFACT REMOVAL')
-                    [DATA]=sem_classifications(data,headers,last_col);
+                    [DATA]=sem_classifications(data,headers,last_col2);
                     
                     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
                     disp(['Number of Viable Particles: ',num2str(length(data(:,1)))])
                     
-                    flag=1;
+                    catflag=1;
                     artefact_string={'YOUNG ET AL., (2016) SELECTED, NO ARTEFACT REMOVAL'};
                     
                 otherwise
@@ -156,25 +180,51 @@ if new==0,
                 
                 case 1
                     
+                    last_col=7+((col-2)-21);
+                    data=zeros(length(num(:,1)),last_col);
+                    data(:,1)=num(:,2);                      % FIELD NUMBER
+                    data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
+                    data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
+                    data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
+                    data(:,5)=num(:,18);                     % SHAPE PARAMETER
+                    data(:,6)=num(:,19);                     % ASPECT RATIO
+                    data(:,7:last_col)=num(:,21:col-2);      % ELEMENT LIST
+                    headers=[txt(2) txt(16) txt(14) 'Volume' txt(18) txt(19) txt(21:col-2)];
+                                                         
                     disp('KANDLER ET AL., (2011) SELECTED WITH ARTEFACT REMOVAL')
                     [dat,ARTEFACTS,total_num]=sem_artefacts(data,headers);
-                    [DATA]=sem_kandler2011(dat,headers,last_col);
+                    
+                    headers(:,6)=[];
+                    headers(:,5)=[];
+                    last_col2=last_col-2;
+                    
+                    [DATA]=sem_kandler2011(dat,headers,last_col2);
                     
                     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
                     disp(['Number of Viable Particles: ',num2str(length(dat(:,1)))])
                     
-                    flag=2;
+                    catflag=2;
                     artefact_string={'KANDLER ET AL., (2011) SELECTED WITH ARTEFACT REMOVAL'};
                     
                 case 2
                     
+                    last_col=7+((col-2)-21);
+                    data=zeros(length(num(:,1)),last_col-2);
+                    data(:,1)=num(:,2);                      % FIELD NUMBER
+                    data(:,2)=num(:,16);                     % PARTICLE AREA (UM^2)
+                    data(:,3)=num(:,14);                     % PARTICLE AVERAGE DIAMETER (UM)
+                    data(:,4)=pi./6.*(data(:,2).^3);         % VOLUME OF EQUIVALENT-DIAMETER SPHERE
+                    data(:,5:last_col-2)=num(:,21:col-2);      % ELEMENT LIST
+                    headers=[txt(2) txt(16) txt(14) 'Volume' txt(21:col-2)];
+                    last_col2=last_col-2;
+                    
                     disp('KANDLER ET AL., (2011) SELECTED, NO ARTEFACT REMOVAL')
-                    [DATA]=sem_kandler2011(data,headers,last_col);
+                    [DATA]=sem_kandler2011(data,headers,last_col2);
                     
                     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
                     disp(['Number of Viable Particles: ',num2str(length(data(:,1)))])
                     
-                    flag=2;
+                    catflag=2;
                     artefact_string={'KANDLER ET AL., (2011) SELECTED, NO ARTEFACT REMOVAL'};
                     
                 otherwise
@@ -187,38 +237,38 @@ if new==0,
     
 elseif new==1
     
-% % %     [~,leng] = xlsread(filename,'Mass % (norm.)', 'A:A'); %number of rows in array
-% % %     [~,col] = xlsread(filename,'Mass % (norm.)', '7:7'); %number of columns in array
+    % % %     [~,leng] = xlsread(filename,'Mass % (norm.)', 'A:A'); %number of rows in array
+    % % %     [~,col] = xlsread(filename,'Mass % (norm.)', '7:7'); %number of columns in array
     [~,leng] = xlsread(filename,5, 'A:A'); %number of rows in array
-    [~,col] = xlsread(filename,5, '7:7'); %number of columns in array    
-%     Alphabet1=('A':'Z').';
-% % %     for i=1:26, Alphabet2{i}=strcat('A',Alphabet1(i)); end;
-%     a=repmat(char('A'),length(Alphabet1),1);
-%     Alphabet2=strcat(a,Alphabet1);    
-%     if length(col)>26 && length(col)<52,
-%         col_num=Alphabet2(length(col)-26,:);
-%     else col_num=Alphabet1(length(col));
-%     end
-%     end_col=[col_num,num2str(length(leng))];
+    [~,col] = xlsread(filename,5, '7:7'); %number of columns in array
+    %     Alphabet1=('A':'Z').';
+    % % %     for i=1:26, Alphabet2{i}=strcat('A',Alphabet1(i)); end;
+    %     a=repmat(char('A'),length(Alphabet1),1);
+    %     Alphabet2=strcat(a,Alphabet1);
+    %     if length(col)>26 && length(col)<52,
+    %         col_num=Alphabet2(length(col)-26,:);
+    %     else col_num=Alphabet1(length(col));
+    %     end
+    %     end_col=[col_num,num2str(length(leng))];
     
-% %     [num,txt,raw]=xlsread(filename,'Mass % (norm.)',['B7:',end_col]);
-% %     [num,txt,raw]=xlsread(filename,5,['B7:',end_col]);
-
-%     lastrow=num2str(length(leng));
-%     [field_no]=xlsread(filename,5,['B7:B',lastrow]);
-%     [area]=xlsread(filename,5,['F7:F',lastrow]);
-%     [avg_diam]=xlsread(filename,5,['G7:G',lastrow]);
-%     [volume]=xlsread(filename,5,['L7:L',lastrow]);
+    % %     [num,txt,raw]=xlsread(filename,'Mass % (norm.)',['B7:',end_col]);
+    % %     [num,txt,raw]=xlsread(filename,5,['B7:',end_col]);
     
-
+    %     lastrow=num2str(length(leng));
+    %     [field_no]=xlsread(filename,5,['B7:B',lastrow]);
+    %     [area]=xlsread(filename,5,['F7:F',lastrow]);
+    %     [avg_diam]=xlsread(filename,5,['G7:G',lastrow]);
+    %     [volume]=xlsread(filename,5,['L7:L',lastrow]);
+    
+    
     filename_csv=[filename(1:end-5),'.csv'];
     element_list=col(16:end);
     [num]=csvread(filename_csv,7,15);       % read in elements
     txt=[element_list 'Field No' 'Area' 'Average Diameter' 'Volume'];
-%     end_row=perl('countlines.pl',filename);
-%     [num]=csvread(filename,8,15);
-
-   
+    %     end_row=perl('countlines.pl',filename);
+    %     [num]=csvread(filename,8,15);
+    
+    
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -231,16 +281,16 @@ elseif new==1
     
     
     
-% %     last_col=5+(length(col)-16);
-% %     data=zeros(length(num(:,1)),last_col);
-% %     headers=[txt(1,1) txt(1,5) txt(1,6) txt(1,11) txt(1,15:length(col)-1)];
-% %     data(:,1)=num(:,1);
-% %     data(:,2:3)=num(:,5:6);
-% %     data(:,4)=num(:,11);
-% %     data(:,5:last_col)=num(:,15:length(col)-1);
-% %     data(isnan(data))=0;
+    % %     last_col=5+(length(col)-16);
+    % %     data=zeros(length(num(:,1)),last_col);
+    % %     headers=[txt(1,1) txt(1,5) txt(1,6) txt(1,11) txt(1,15:length(col)-1)];
+    % %     data(:,1)=num(:,1);
+    % %     data(:,2:3)=num(:,5:6);
+    % %     data(:,4)=num(:,11);
+    % %     data(:,5:last_col)=num(:,15:length(col)-1);
+    % %     data(isnan(data))=0;
     
-
+    
     last_col=5+(length(col)-16);
     data=zeros(length(num(:,1)),last_col);
     headers=[txt(end-3) txt(end-2) txt(end-1) txt(end) txt(1:end-4)];
@@ -248,12 +298,12 @@ elseif new==1
     data(:,2)=num(:,end-2);
     data(:,3)=num(:,end-1);
     data(:,4)=num(:,end);
-    data(:,5:last_col)=num(:,1:last_col-4);
+    data(:,5:last_col)=num(:,1:last_col-4).*100;
     data(isnan(data))=0;
-
-
+    
+    
     element_string1={'Elements identified: '};
-% %     element_string2=headers(5:last_col);
+    % %     element_string2=headers(5:last_col);
     element_string2=element_list;
     
     disp(['Total Number of Particles Detected: ',num2str(length(num(:,1)))])
@@ -273,14 +323,14 @@ elseif new==1
     switch classifications
         case 1
             disp('YOUNG ET AL., (2016) SELECTED')
-            flag=1;
+            catflag=1;
             [DATA]=sem_classifications(data,headers,last_col);
             artefact_string={'YOUNG ET AL., (2016) SELECTED'};
             
         case 2
             disp('KANDLER ET AL., (2011) SELECTED')
             [DATA]=sem_kandler2011(data,headers,last_col);
-            flag=2;
+            catflag=2;
             artefact_string={'KANDLER ET AL., (2011) SELECTED'};
             
         otherwise
@@ -304,7 +354,7 @@ end
 % switch fig_switch
 %     case 1
 disp('SIZE SEGREGATION:')
-[DATA,fig_handle1]=sem_sizeseg(DATA,flag);
+[DATA,fig_handle1]=sem_sizeseg(DATA,catflag);
 fig_string={'SIZE SEGREGATION COMPLETED'};
 %     case 2
 %         disp('SIZE SEGREGATION NOT SELECTED')
@@ -331,7 +381,7 @@ switch sizedist_switch
         DATA.INITIAL.AREA_mm=input('Enter area covered by scan (mm): ');
         DATA.INITIAL.FILTERDIAM_mm=input('Enter filter size (mm): ');
         DATA.INITIAL.EXPOSURE_s=input('Enter length of exposure (s): ');
-        [DATA,fig_handle2]=sem_sizedist(DATA,flag);
+        [DATA,fig_handle2]=sem_sizedist(DATA,catflag);
         sizedist_string1={'SIZE DISTRIBUTION SELECTED'};
         sizedist_flag=1;
         disp('PLOT= plot(DATA.SIZEDIST.SIZEBINS_AV,DATA.SIZEDIST.DNDLOGD_AV_cm3):')
@@ -350,7 +400,7 @@ end
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % % % % % % % % % % % %
 % % % % % % % % % % % %     OUTPUT DATA
-% % % % % % % % % % % %         
+% % % % % % % % % % % %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -370,13 +420,13 @@ cd(dirname)
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 if new==0
-    output_data=data;
+    output_data=DATA.All.Raw;
     output_headers=[headers 'Classification Flag'];
     for i=1:length(DATA.SIZESEG.CATEGORIES),
-        eval(['output_data(DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.All_Indices,24)=',num2str(i),';'])
+        eval(['output_data(DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.All_Indices,last_col-1)=',num2str(i),';'])
     end
     
-    disp(['Enter Classification Flag (col 24) into DATA.SIZESEG.CATEGORIES for full description, or see ***_info.txt file for details'])
+    disp(['Enter Classification Flag into DATA.SIZESEG.CATEGORIES for full description, or see ***_info.txt file for details'])
     
     
     % %// Write fields to CSV file
@@ -389,7 +439,7 @@ if new==0
     dlmwrite(outputfilename, output_data, '-append', 'precision', '%.6f', 'delimiter', '\t');
     
 elseif new==1
-    output_data=data;
+    output_data=DATA.All.Raw;
     output_headers=[headers 'Classification Flag'];
     for i=1:length(DATA.SIZESEG.CATEGORIES),
         eval(['output_data(DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.All_Indices,last_col+1)=',num2str(i),';'])
@@ -431,26 +481,26 @@ if sizedist_flag==1,
         eval(['DATA.',char(DATA.SIZESEG.CATEGORIES(index2(i))),'.NumberConcentration_cm3=zeros(length(DATA.SIZEDIST.SIZEBINS),1)';])
     end
     
-%     sizedist_switch2 = input('Choose data to output to .csv file: (1) Number concentration/size bin, (2) dN/dlogDp: ');
-%     switch sizedist_switch2
-%         case 1
-            sizedist_headers=['Bin centres (um)','Total_cm3',DATA.SIZESEG.CATEGORIES];
-            sizedist_data(:,1)=DATA.SIZEDIST.SIZEBINS;
-            sizedist_data(:,2)=DATA.SIZEDIST.NUMCONC_cm3;
-            for i=1:length(DATA.SIZESEG.CATEGORIES)
-                eval(['sizedist_data(:,2+i)=DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.NumberConcentration_cm3;'])
-            end
-            sizedist_string2={'OUTPUT: NUMBER CONCENTRATION (/CM3) IN EACH SIZE BIN'};
-%         case 2
-%             sizedist_headers=['Bin centres (um)','Total_cm3',DATA.SIZESEG.CATEGORIES];
-%             sizedist_data(:,1)=DATA.SIZEDIST.SIZEBINS(1:end-1);
-%             sizedist_data(:,2)=DATA.SIZEDIST.DNDLOGD_cm3;
-%             for i=1:length(DATA.SIZESEG.CATEGORIES)
-%                 eval(['sizedist_data(:,2+i)=DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.DNDLOGD_cm3;'])
-%             end 
-%             sizedist_string2={'OUTPUT: DN/DLOGDP'};
-%     end
-
+    %     sizedist_switch2 = input('Choose data to output to .csv file: (1) Number concentration/size bin, (2) dN/dlogDp: ');
+    %     switch sizedist_switch2
+    %         case 1
+    sizedist_headers=['Bin centres (um)','Total_cm3',DATA.SIZESEG.CATEGORIES];
+    sizedist_data(:,1)=DATA.SIZEDIST.SIZEBINS;
+    sizedist_data(:,2)=DATA.SIZEDIST.NUMCONC_cm3;
+    for i=1:length(DATA.SIZESEG.CATEGORIES)
+        eval(['sizedist_data(:,2+i)=DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.NumberConcentration_cm3;'])
+    end
+    sizedist_string2={'OUTPUT: NUMBER CONCENTRATION (/CM3) IN EACH SIZE BIN'};
+    %         case 2
+    %             sizedist_headers=['Bin centres (um)','Total_cm3',DATA.SIZESEG.CATEGORIES];
+    %             sizedist_data(:,1)=DATA.SIZEDIST.SIZEBINS(1:end-1);
+    %             sizedist_data(:,2)=DATA.SIZEDIST.DNDLOGD_cm3;
+    %             for i=1:length(DATA.SIZESEG.CATEGORIES)
+    %                 eval(['sizedist_data(:,2+i)=DATA.',char(DATA.SIZESEG.CATEGORIES(i)),'.DNDLOGD_cm3;'])
+    %             end
+    %             sizedist_string2={'OUTPUT: DN/DLOGDP'};
+    %     end
+    
     
     
     % %// Write fields to CSV file
@@ -479,7 +529,7 @@ end
 string={'Classification flag corresponds to the following:'};
 string_blank={' '};
 for i=1:length(DATA.SIZESEG.CATEGORIES),
-   string1(i)=strcat(num2str(i),': ',DATA.SIZESEG.CATEGORIES(i));
+    string1(i)=strcat(num2str(i),': ',DATA.SIZESEG.CATEGORIES(i));
 end
 
 metafilename=strcat(name,'_info.txt');
