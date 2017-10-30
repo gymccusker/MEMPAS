@@ -3,7 +3,7 @@ Manchester Electron Microscope Particle Analysis Software
 
 Authors: Gillian Young (University of Manchester)
 
-Contact gillian.young@manchester.ac.uk with any queries.
+Contact giyoung@bas.ac.uk with any queries.
 
 -----------------------------------------------------------------------------
 
